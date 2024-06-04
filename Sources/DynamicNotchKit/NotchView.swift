@@ -21,11 +21,11 @@ struct NotchView: View {
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
                         .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
                         .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
-                        .frame(minHeight: 20)
+                        .frame(width: self.dynamicNotch.customWidth, height: self.dynamicNotch.customHeight)
                         .padding(.top, self.isInfo ? -20 : 0)
                 }
                 .fixedSize()
-                .frame(minWidth: self.notchSize.width)
+                .frame(width: self.dynamicNotch.customWidth, height: self.dynamicNotch.customHeight)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
