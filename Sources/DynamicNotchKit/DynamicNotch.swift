@@ -72,13 +72,8 @@ public class DynamicNotch: ObservableObject {
 
         self.initializeWindow(screen: screen)
 
-        let targetWidth = customWidth ?? DynamicNotch.getNotchSize(screen: screen).width
-        let targetHeight = customHeight ?? DynamicNotch.getNotchSize(screen: screen).height
-
         DispatchQueue.main.async {
             withAnimation(self.animation) {
-                self.notchWidth = targetWidth
-                self.notchHeight = targetHeight
                 self.isVisible = true
             }
         }
@@ -174,8 +169,8 @@ public class DynamicNotch: ObservableObject {
         }
 
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
-        self.notchWidth = notchSize.width
-        self.notchHeight = notchSize.height
+        self.notchWidth = customWidth ?? notchSize.width
+        self.notchHeight = customHeight ?? notchSize.height
     }
 
     private func initializeWindow(screen: NSScreen) {
