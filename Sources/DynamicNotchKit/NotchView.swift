@@ -12,23 +12,20 @@ struct NotchView: View {
                 Spacer()
 
                 VStack(spacing: 0) {
-                    if let customWidth = self.dynamicNotch.customWidth, let customHeight = self.dynamicNotch.customHeight {
-                        Spacer()
-                            .frame(width: customWidth + 20, height: customHeight)
-                    } else {
-                        Spacer()
-                            .frame(width: self.notchSize.width + 20, height: self.notchSize.height)
-                    }
+                    Spacer()
+                        .frame(width: (self.dynamicNotch.customWidth ?? self.notchSize.width) + 20, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                        // We add an extra 20 here because the corner radius of the top increases when shown.
+                        // (the remaining 10 has already been accounted for in refreshNotchSize)
 
                     self.dynamicNotch.content
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
                         .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
                         .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
-                        .frame(minWidth: self.dynamicNotch.customWidth ?? self.notchSize.width, minHeight: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                        .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
                         .padding(.top, self.isInfo ? -20 : 0)
                 }
                 .fixedSize()
-                .frame(minWidth: self.dynamicNotch.customWidth ?? self.notchSize.width, minHeight: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
