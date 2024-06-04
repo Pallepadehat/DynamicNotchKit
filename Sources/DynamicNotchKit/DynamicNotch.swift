@@ -7,7 +7,7 @@ public class DynamicNotch: ObservableObject {
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
     @Published var notchWidth: CGFloat = 0
-    @Published var notchHeight: CGFloat = 60
+    @Published var notchHeight: CGFloat = 0
     @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
