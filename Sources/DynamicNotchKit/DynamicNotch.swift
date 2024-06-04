@@ -72,8 +72,13 @@ public class DynamicNotch: ObservableObject {
 
         self.initializeWindow(screen: screen)
 
+        let targetWidth = customWidth ?? DynamicNotch.getNotchSize(screen: screen).width
+        let targetHeight = customHeight ?? DynamicNotch.getNotchSize(screen: screen).height
+
         DispatchQueue.main.async {
             withAnimation(self.animation) {
+                self.notchWidth = targetWidth
+                self.notchHeight = targetHeight
                 self.isVisible = true
             }
         }
