@@ -9,7 +9,6 @@ public class DynamicNotch: ObservableObject {
     @Published var notchWidth: CGFloat = 0
     @Published var notchHeight: CGFloat = 0
     @Published var notchStyle: Style = .notch
-    
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
@@ -29,8 +28,8 @@ public class DynamicNotch: ObservableObject {
         case floating
     }
 
-    public var customWidth: CGFloat? = 0 // New custom width
-    public var customHeight: CGFloat? = 0 // New custom height
+    public var customWidth: CGFloat? // New custom width
+    public var customHeight: CGFloat? // New custom height
 
     /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
