@@ -96,12 +96,27 @@ public class DynamicNotch: ObservableObject {
             return
         }
 
-        withAnimation(self.animation) {
-            self.isVisible = false
+        let originalWidth = notchWidth
+        let originalHeight = notchHeight
+        let shrinkDuration = animationDuration / 2
+
+        // Step 1: Shrink to original notch size
+        withAnimation(Animation.easeInOut(duration: shrinkDuration)) {
+            self.notchWidth = DynamicNotch.getNotchSize(screen: NSScreen.screens[0]).width
+            self.notchHeight = DynamicNotch.getNotchSize(screen: NSScreen.screens[0]).height
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + self.animationDuration * 2) {
-            self.deinitializeWindow()
+        // Step 2: Hide after shrinking
+        DispatchQueue.main.asyncAfter(deadline: .now() + shrinkDuration) {
+            withAnimation(self.animation) {
+                self.isVisible = false
+            }
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.animationDuration) {
+                self.notchWidth = originalWidth
+                self.notchHeight = originalHeight
+                self.deinitializeWindow()
+            }
         }
     }
     
