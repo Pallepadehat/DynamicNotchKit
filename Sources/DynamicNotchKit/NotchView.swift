@@ -25,7 +25,7 @@ struct NotchView: View {
                         .padding(.top, self.isInfo ? -20 : 0)
                 }
                 .fixedSize()
-                .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? nil)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
