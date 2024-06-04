@@ -100,10 +100,7 @@ public class DynamicNotch: ObservableObject {
             self.isVisible = false
         }
 
-        self.timer = Timer.scheduledTimer(
-            withTimeInterval: self.animationDuration * 2,
-            repeats: false
-        ) { _ in
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.animationDuration * 2) {
             self.deinitializeWindow()
         }
     }
