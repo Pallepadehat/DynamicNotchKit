@@ -72,8 +72,8 @@ public class DynamicNotch: ObservableObject {
 
         self.initializeWindow(screen: screen)
 
-        let targetWidth = customWidth ?? DynamicNotch.getNotchSize(screen: screen).width
-        let targetHeight = customHeight ?? DynamicNotch.getNotchSize(screen: screen).height
+        let targetWidth = customWidth ?? notchWidth
+        let targetHeight = customHeight ?? notchHeight
 
         DispatchQueue.main.async {
             withAnimation(self.animation) {
@@ -101,8 +101,6 @@ public class DynamicNotch: ObservableObject {
             return
         }
 
-        let originalWidth = notchWidth
-        let originalHeight = notchHeight
         let shrinkDuration = animationDuration / 2
 
         // Step 1: Shrink to original notch size
@@ -118,8 +116,6 @@ public class DynamicNotch: ObservableObject {
             }
 
             DispatchQueue.main.asyncAfter(deadline: .now() + self.animationDuration) {
-                self.notchWidth = originalWidth
-                self.notchHeight = originalHeight
                 self.deinitializeWindow()
             }
         }
