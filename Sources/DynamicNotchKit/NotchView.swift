@@ -21,11 +21,11 @@ struct NotchView: View {
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
                         .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
                         .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
-                        .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                        .frame(minWidth: self.dynamicNotch.customWidth ?? self.notchSize.width, minHeight: 20)
                         .padding(.top, self.isInfo ? -20 : 0)
                 }
                 .fixedSize()
-                .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                .frame(minWidth: self.dynamicNotch.customWidth ?? self.notchSize.width, minHeight: self.dynamicNotch.customHeight ?? self.notchSize.height)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
@@ -40,8 +40,8 @@ struct NotchView: View {
                             Spacer(minLength: 0)
                             NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)
                                 .frame(
-                                    width: self.dynamicNotch.customWidth ?? self.notchSize.width,
-                                    height: self.dynamicNotch.customHeight ?? self.notchSize.height
+                                    width: self.dynamicNotch.isVisible ? (self.dynamicNotch.customWidth ?? self.notchSize.width) : (self.dynamicNotch.customWidth ?? self.notchSize.width),
+                                    height: self.dynamicNotch.isVisible ? (self.dynamicNotch.customHeight ?? self.notchSize.height) : (self.dynamicNotch.customHeight ?? self.notchSize.height)
                                 )
                             Spacer(minLength: 0)
                         }
