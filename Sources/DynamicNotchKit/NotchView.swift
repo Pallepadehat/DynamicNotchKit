@@ -12,10 +12,13 @@ struct NotchView: View {
                 Spacer()
 
                 VStack(spacing: 0) {
-                    Spacer()
-                        .frame(width: (self.dynamicNotch.customWidth ?? self.notchSize.width) + 20, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
-                        // We add an extra 20 here because the corner radius of the top increases when shown.
-                        // (the remaining 10 has already been accounted for in refreshNotchSize)
+                    if (self.dynamicNotch.customHeight != nil) || (self.dynamicNotch.customWidth != nil) {
+                        Spacer()
+                            .frame(width: (self.dynamicNotch.customWidth ?? self.notchSize.width) + 20, height: self.dynamicNotch.customHeight ?? self.notchSize.height)
+                    } else {
+                        Spacer()
+                            .frame(width: self.notchSize.width + 20, height: self.notchSize.height)
+                    }
 
                     self.dynamicNotch.content
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
