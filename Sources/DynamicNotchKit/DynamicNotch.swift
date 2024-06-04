@@ -34,7 +34,10 @@ public class DynamicNotch: ObservableObject {
         case notch
         case floating
     }
-    
+
+    public var customWidth: CGFloat? // New custom width
+    public var customHeight: CGFloat? // New custom height
+
     /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
     ///   - content: A SwiftUI View
@@ -51,6 +54,11 @@ public class DynamicNotch: ObservableObject {
     }
 
     // MARK: Public methods
+
+    public func setCustomSize(width: CGFloat?, height: CGFloat?) {
+        self.customWidth = width
+        self.customHeight = height
+    }
     
     /// Set this DynamicNotch's content.
     /// - Parameter content: A SwiftUI View
@@ -61,7 +69,6 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    
     /// Show the DynamicNotch.
     /// - Parameters:
     ///   - screen: Screen to show on. Default is the primary screen.
@@ -161,8 +168,8 @@ public class DynamicNotch: ObservableObject {
         }
 
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
-        self.notchWidth = notchSize.width
-        self.notchHeight = notchSize.height
+        self.notchWidth = customWidth ?? notchSize.width
+        self.notchHeight = customHeight ?? notchSize.height
     }
 
     private func initializeWindow(screen: NSScreen) {

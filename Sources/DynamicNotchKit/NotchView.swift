@@ -1,10 +1,3 @@
-//
-//  NotchView.swift
-//
-//
-//  Created by Kai Azim on 2023-08-24.
-//
-
 import SwiftUI
 
 struct NotchView: View {
@@ -47,8 +40,8 @@ struct NotchView: View {
                             Spacer(minLength: 0)
                             NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)
                                 .frame(
-                                    width: self.dynamicNotch.isVisible ? nil : self.notchSize.width,
-                                    height: self.dynamicNotch.isVisible ? nil : self.notchSize.height
+                                    width: self.dynamicNotch.isVisible ? dynamicNotch.customWidth : self.notchSize.width,
+                                    height: self.dynamicNotch.isVisible ? dynamicNotch.customHeight : self.notchSize.height
                                 )
                             Spacer(minLength: 0)
                         }
