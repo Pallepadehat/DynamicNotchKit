@@ -15,7 +15,7 @@ public class DynamicNotch: ObservableObject {
 
     private var animation: Animation {
         if #available(macOS 14.0, *), notchStyle == .notch {
-            return Animation.spring(.bouncy(duration: 0.4))
+            return Animation.spring(.bouncy(duration: 0.8))
         } else {
             return Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
         }
@@ -72,8 +72,8 @@ public class DynamicNotch: ObservableObject {
 
         self.initializeWindow(screen: screen)
 
-        let targetWidth = customWidth ?? notchWidth
-        let targetHeight = customHeight ?? notchHeight
+        let targetWidth = customWidth ?? DynamicNotch.getNotchSize(screen: screen).width
+        let targetHeight = customHeight ?? DynamicNotch.getNotchSize(screen: screen).height
 
         DispatchQueue.main.async {
             withAnimation(self.animation) {
