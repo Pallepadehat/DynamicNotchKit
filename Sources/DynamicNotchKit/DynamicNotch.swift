@@ -148,11 +148,7 @@ public class DynamicNotch: ObservableObject {
         }
         self.refreshNotchSize(screen)
 
-        var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
-
-        if self.notchStyle == .floating {
-            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
-        }
+        let view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
 
         let panel = NSPanel(
             contentRect: .zero,

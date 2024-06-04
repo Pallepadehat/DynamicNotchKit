@@ -13,7 +13,7 @@ struct NotchView: View {
 
                 VStack(spacing: 0) {
                     Spacer()
-                        .frame(width: self.dynamicNotch.isExpanded ? self.notchSize.width * 2 : self.notchSize.width + 20, height: self.notchSize.height)
+                        .frame(width: self.dynamicNotch.isExpanded && self.dynamicNotch.notchStyle == .small ? self.notchSize.width * 2 : self.notchSize.width + 20, height: self.notchSize.height)
 
                     self.dynamicNotch.content
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
@@ -39,7 +39,7 @@ struct NotchView: View {
                             NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)
                                 .frame(
                                     width: self.dynamicNotch.isExpanded && self.dynamicNotch.notchStyle == .small ? self.notchSize.width * 2 : self.notchSize.width,
-                                    height: self.dynamicNotch.isVisible ? nil : self.notchSize.height
+                                    height: self.notchSize.height
                                 )
                             Spacer(minLength: 0)
                         }
