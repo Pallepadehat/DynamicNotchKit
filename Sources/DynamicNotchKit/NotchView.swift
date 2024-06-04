@@ -10,20 +10,20 @@ import SwiftUI
 struct NotchView: View {
     @ObservedObject var dynamicNotch: DynamicNotch
     @State var notchSize: NSSize = .zero
-
+    
     @State private var isInfo: Bool = false
-
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
                 Spacer()
-
+                
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(width:  self.dynamicNotch.customWidth != nil ? self.dynamicNotch.customWidth : self.notchSize.width + 20, height: self.dynamicNotch.customHeight != nil ? self.dynamicNotch.customHeight : self.notchSize.height)
-                        // We add an extra 20 here because the corner radius of the top increases when shown.
-                        // (the remaining 10 has already been accounted for in refreshNotchSize)
-
+                    // We add an extra 20 here because the corner radius of the top increases when shown.
+                    // (the remaining 10 has already been accounted for in refreshNotchSize)
+                    
                     self.dynamicNotch.content
                         .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
                         .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
@@ -51,15 +51,15 @@ struct NotchView: View {
                                     height: self.dynamicNotch.isVisible ? nil : self.notchSize.height
                                 )
                                 .frame(
-                                    width: self.dynamicNotch.isVisible ? nil :  (self.dynamicNotch.customWidth ?? self.notchSize.width),
-                                    height: self.dynamicNotch.isVisible ? nil : (self.dynamicNotch.customHeight ?? self.notchSize.height)
-                                                               )
+                                    width: self.dynamicNotch.isVisible ? nil :  self.dynamicNotch.customWidth != nil ? self.dynamicNotch.customWidth  : self.notchSize.width,
+                                    height: self.dynamicNotch.isVisible ? nil : self.dynamicNotch.customHeight != nil ? self.dynamicNotch.customHeight : self.notchSize.height
+                                )
                             Spacer(minLength: 0)
                         }
                     }
                 }
                 .shadow(color: .black.opacity(0.5), radius: self.dynamicNotch.isVisible ? 10 : 0)
-
+                
                 Spacer()
             }
             Spacer()
@@ -69,7 +69,7 @@ struct NotchView: View {
                 width: self.dynamicNotch.notchWidth,
                 height: self.dynamicNotch.notchHeight
             )
-
+            
             if self.dynamicNotch as? DynamicNotchInfo != nil {
                 self.isInfo = true
             }
