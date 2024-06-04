@@ -1,3 +1,10 @@
+//
+//  NotchView.swift
+//
+//
+//  Created by Kai Azim on 2023-08-24.
+//
+
 import SwiftUI
 
 struct NotchView: View {
@@ -25,7 +32,7 @@ struct NotchView: View {
                         .padding(.top, self.isInfo ? -20 : 0)
                 }
                 .fixedSize()
-                .frame(width: self.dynamicNotch.customWidth ?? self.notchSize.width, height: self.dynamicNotch.customHeight ?? nil)
+                .frame(minWidth: self.notchSize.width)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
@@ -40,8 +47,8 @@ struct NotchView: View {
                             Spacer(minLength: 0)
                             NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)
                                 .frame(
-                                    width: self.dynamicNotch.isVisible ? self.dynamicNotch.customWidth ?? self.notchSize.width : self.notchSize.width,
-                                    height: self.dynamicNotch.isVisible ? self.dynamicNotch.customHeight ?? self.notchSize.height : self.notchSize.height
+                                    width: self.dynamicNotch.isVisible ? nil : self.notchSize.width,
+                                    height: self.dynamicNotch.isVisible ? nil : self.notchSize.height
                                 )
                             Spacer(minLength: 0)
                         }
