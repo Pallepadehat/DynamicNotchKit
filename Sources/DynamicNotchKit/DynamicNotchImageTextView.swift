@@ -63,6 +63,7 @@ public class DynamicNotchImageTextView: DynamicNotch {
                     .resizable()
                     .scaledToFit()
                     .frame(width: imageSize.width, height: imageSize.height)
+                Spacer()
                 Text(text)
                     .font(.headline)
                     .foregroundStyle(.primary)
@@ -72,6 +73,7 @@ public class DynamicNotchImageTextView: DynamicNotch {
                     .font(.headline)
                     .foregroundStyle(.primary)
                     .padding(.trailing, 10)
+                Spacer()
                 image?
                     .resizable()
                     .scaledToFit()
@@ -79,7 +81,6 @@ public class DynamicNotchImageTextView: DynamicNotch {
             }
         }
         .frame(height: max(imageSize.height, 40)) // Ensure the height is at least as tall as the image or 40
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center) // Center the content
+        .padding(10)
     }
 }
