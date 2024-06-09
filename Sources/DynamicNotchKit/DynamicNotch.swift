@@ -66,11 +66,11 @@ public class DynamicNotch: ObservableObject {
     /// - Parameters:
     ///   - screen: Screen to show on. Default is the primary screen.
     ///   - time: Time to show in seconds. If 0, the DynamicNotch will stay visible until `hide()` is called.
-    public func show(on screen: NSScreen = NSScreen.screens[0], for time: Double = 0) {
+    public func show(on screen: NSScreen = NSScreen.screens[0], for time: Double = 0, showFakeNotch: Bool) {
         if self.isVisible { return }
         timer?.invalidate()
 
-        self.initializeWindow(screen: screen)
+        self.initializeWindow(screen: screen, showFakeNotch: showFakeNotch)
 
         let targetWidth = customWidth ?? DynamicNotch.getNotchSize(screen: screen).width
         let targetHeight = customHeight ?? DynamicNotch.getNotchSize(screen: screen).height
@@ -122,11 +122,11 @@ public class DynamicNotch: ObservableObject {
     }
     
     /// Toggle the DynamicNotch's visibility.
-    public func toggle() {
+    public func toggle(showFakeNotch: Bool) {
         if self.isVisible {
             self.hide()
         } else {
-            self.show()
+            self.show(showFakeNotch: showFakeNotch)
         }
     }
     
@@ -178,7 +178,7 @@ public class DynamicNotch: ObservableObject {
         self.notchHeight = notchSize.height
     }
 
-    private func initializeWindow(screen: NSScreen) {
+    private func initializeWindow(screen: NSScreen, showFakeNotch: Bool) {
         if let windowController = windowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -187,7 +187,7 @@ public class DynamicNotch: ObservableObject {
 
         var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
 
-        if self.notchStyle == .floating {
+        if !showFakeNotch || self.notchStyle == .floating {
             view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
         }
 
