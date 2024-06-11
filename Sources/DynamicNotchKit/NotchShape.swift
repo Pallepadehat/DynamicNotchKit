@@ -1,20 +1,9 @@
-//
-//  NotchShape.swift
-//
-//
-//  Created by Kai Azim on 2023-08-24.
-//
-
-import SwiftUI
-
 struct NotchShape: Shape {
     var topCornerRadius: CGFloat {
-        get {
-            return self.bottomCornerRadius - 5
-        }
+        return bottomCornerRadius - 5
     }
     var bottomCornerRadius: CGFloat
-    
+
     init(cornerRadius: CGFloat? = nil) {
         if cornerRadius == nil {
             self.bottomCornerRadius = 10
@@ -22,7 +11,7 @@ struct NotchShape: Shape {
             self.bottomCornerRadius = cornerRadius!
         }
     }
-    
+
     var animatableData: CGFloat {
         get { bottomCornerRadius }
         set { bottomCornerRadius = newValue }
@@ -43,10 +32,4 @@ struct NotchShape: Shape {
 
         return path
     }
-}
-
-#Preview {
-    NotchShape()
-        .frame(width: 200, height: 32)
-        .padding(10)
 }

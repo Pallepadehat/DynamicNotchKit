@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct NotchView: View {
-    @ObservedObject var dynamicNotch: DynamicNotch
-    @State var notchSize: NSSize = .zero
+    @ObservedObject var notch: DynamicNotch
 
     var body: some View {
         VStack(spacing: 0) {
@@ -11,19 +10,19 @@ struct NotchView: View {
 
                 VStack(spacing: 0) {
                     Spacer()
-                        .frame(width: self.notchSize.width + 20, height: self.notchSize.height)
+                        .frame(width: notch.notchWidth + 20, height: notch.notchHeight)
                         .background(Color.black)
 
-                    self.dynamicNotch.content
-                        .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
-                        .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
+                    notch.content
+                        .blur(radius: notch.isVisible ? 0 : 10)
+                        .scaleEffect(notch.isVisible ? 1 : 0.8)
                         .padding(.horizontal, 15)
                         .frame(minHeight: 20)
                 }
                 .fixedSize()
-                .frame(minWidth: self.notchSize.width)
+                .frame(minWidth: notch.notchWidth)
                 .onHover { hovering in
-                    dynamicNotch.isMouseInside = hovering
+                    notch.isMouseInside = hovering
                 }
                 .background {
                     Rectangle()
@@ -31,29 +30,22 @@ struct NotchView: View {
                         .padding(-50)
                 }
                 .mask {
-                    GeometryReader { _ in
+                    GeometryReader { geometry in
                         HStack {
                             Spacer(minLength: 0)
-                            NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)
-                                .frame(
-                                    width: self.dynamicNotch.isVisible ? nil : self.notchSize.width,
-                                    height: self.dynamicNotch.isVisible ? nil : self.notchSize.height
-                                )
+                            NotchShape(cornerRadius: notch.isVisible ? 20 : nil)
+                                .path(in: CGRect(x: 0, y: 0, width: notch.notchWidth, height: notch.notchHeight))
+                                .frame(width: notch.notchWidth, height: notch.notchHeight)
                             Spacer(minLength: 0)
                         }
                     }
                 }
-                .shadow(color: .black.opacity(0.5), radius: self.dynamicNotch.isVisible ? 10 : 0)
+                .shadow(color: .black.opacity(0.5), radius: notch.isVisible ? 10 : 0)
 
                 Spacer()
             }
             Spacer()
         }
-        .onAppear {
-            self.notchSize = .init(
-                width: self.dynamicNotch.notchWidth,
-                height: self.dynamicNotch.notchHeight
-            )
-        }
     }
 }
+
