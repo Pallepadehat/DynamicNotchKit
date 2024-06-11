@@ -1,3 +1,5 @@
+import SwiftUI
+
 struct NotchShape: Shape {
     var topCornerRadius: CGFloat {
         return bottomCornerRadius - 5
