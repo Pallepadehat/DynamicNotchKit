@@ -1,10 +1,3 @@
-//
-//  DynamicNotch.swift
-//
-//
-//  Created by Kai Azim on 2023-08-24.
-//
-
 import SwiftUI
 
 public class DynamicNotch: ObservableObject {
@@ -143,7 +136,7 @@ public class DynamicNotch: ObservableObject {
             return .init(width: notchWidth, height: notchHeight)
         }
 
-        // here we assign the menubar height, so that the method checkIfMouseIsInNotch still works
+        // Assign the menubar height for screens without a notch
         let notchHeight = screen.frame.height - screen.visibleFrame.height
         let notchWidth: CGFloat = 220
         return .init(width: notchWidth, height: notchHeight)
@@ -208,3 +201,4 @@ public class DynamicNotch: ObservableObject {
         self.windowController = nil
     }
 }
+
