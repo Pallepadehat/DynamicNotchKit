@@ -4,7 +4,7 @@ public class DynamicNotch: ObservableObject {
     public var content: AnyView
     public var windowController: NSWindowController? // In case user wants to modify the NSPanel
 
-    @Published public var isVisible: Bool = false
+    @Published public var isVisible: Bool = true
     @Published var isMouseInside: Bool = false
     @Published var notchWidth: CGFloat = 0
     @Published var notchHeight: CGFloat = 0
@@ -21,12 +21,10 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    // If true, DynamicNotchKit will use the .notch/.floating style according to the screen.
     private let autoManageNotchStyle: Bool
 
     public enum Style {
         case notch
-        case floating
     }
     
     /// Makes a new DynamicNotch with custom content and style.
@@ -52,7 +50,6 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    
     /// Show the DynamicNotch.
     /// - Parameters:
     ///   - screen: Screen to show on. Default is the primary screen.
@@ -143,14 +140,6 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func refreshNotchSize(_ screen: NSScreen) {
-        if self.autoManageNotchStyle,
-           let topLeftNotchpadding: CGFloat = screen.auxiliaryTopLeftArea?.width,
-           let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
-            self.notchStyle = .notch
-        } else {
-            self.notchStyle = .floating
-        }
-
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
         self.notchWidth = notchSize.width
         self.notchHeight = notchSize.height
@@ -163,11 +152,7 @@ public class DynamicNotch: ObservableObject {
         }
         self.refreshNotchSize(screen)
 
-        var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
-
-        if self.notchStyle == .floating {
-            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
-        }
+        let view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
 
         let panel = NSPanel(
             contentRect: .zero,

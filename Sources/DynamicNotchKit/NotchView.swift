@@ -11,8 +11,6 @@ struct NotchView: View {
     @ObservedObject var dynamicNotch: DynamicNotch
     @State var notchSize: NSSize = .zero
 
-    @State private var isInfo: Bool = false
-
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -24,12 +22,13 @@ struct NotchView: View {
                         // We add an extra 20 here because the corner radius of the top increases when shown.
                         // (the remaining 10 has already been accounted for in refreshNotchSize)
 
-                    self.dynamicNotch.content
-                        .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
-                        .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
-                        .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
-                        .frame(minHeight: 20)
-                        .padding(.top, self.isInfo ? -20 : 0)
+                    if self.dynamicNotch.isVisible {
+                        self.dynamicNotch.content
+                            .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
+                            .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
+                            .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
+                            .frame(minHeight: 20)
+                    }
                 }
                 .fixedSize()
                 .frame(minWidth: self.notchSize.width)
@@ -65,10 +64,6 @@ struct NotchView: View {
                 width: self.dynamicNotch.notchWidth,
                 height: self.dynamicNotch.notchHeight
             )
-
-            if self.dynamicNotch as? DynamicNotchInfo != nil {
-                self.isInfo = true
-            }
         }
     }
 }
