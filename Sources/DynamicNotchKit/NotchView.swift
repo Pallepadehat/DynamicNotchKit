@@ -1,10 +1,3 @@
-//
-//  NotchView.swift
-//
-//
-//  Created by Kai Azim on 2023-08-24.
-//
-
 import SwiftUI
 
 struct NotchView: View {
@@ -19,14 +12,13 @@ struct NotchView: View {
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(width: self.notchSize.width + 20, height: self.notchSize.height)
-                        // We add an extra 20 here because the corner radius of the top increases when shown.
-                        // (the remaining 10 has already been accounted for in refreshNotchSize)
+                        .background(Color.black)
 
                     if self.dynamicNotch.isVisible {
                         self.dynamicNotch.content
                             .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
                             .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
-                            .padding(.horizontal, 15)    // Small corner radius of the TOP of the notch
+                            .padding(.horizontal, 15)
                             .frame(minHeight: 20)
                     }
                 }
@@ -38,10 +30,10 @@ struct NotchView: View {
                 .background {
                     Rectangle()
                         .foregroundStyle(.black)
-                        .padding(-50)   // The opening/closing animation can overshoot, so this makes sure that it's still black
+                        .padding(-50)
                 }
                 .mask {
-                    GeometryReader { _ in   // This helps with positioning everything
+                    GeometryReader { _ in
                         HStack {
                             Spacer(minLength: 0)
                             NotchShape(cornerRadius: self.dynamicNotch.isVisible ? 20 : nil)

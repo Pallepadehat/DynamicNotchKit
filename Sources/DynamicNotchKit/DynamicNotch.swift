@@ -6,8 +6,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = true
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 0
-    @Published var notchHeight: CGFloat = 0
+    @Published var notchWidth: CGFloat = 220
+    @Published var notchHeight: CGFloat = 40
     @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
@@ -15,7 +15,7 @@ public class DynamicNotch: ObservableObject {
 
     private var animation: Animation {
         if #available(macOS 14.0, *), notchStyle == .notch {
-            return Animation.spring(.bouncy(duration: 0.4))
+            return Animation.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.25)
         } else {
             return Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
         }
@@ -26,13 +26,17 @@ public class DynamicNotch: ObservableObject {
     public enum Style {
         case notch
     }
-    
+
     /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
     ///   - content: A SwiftUI View
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    public init<Content: View>(content: Content, style: DynamicNotch.Style! = nil) {
-        self.content = AnyView(content)
+    public init<Content: View>(content: Content? = nil, style: DynamicNotch.Style! = nil) {
+        if let content = content {
+            self.content = AnyView(content)
+        } else {
+            self.content = AnyView(Text("").frame(width: 220, height: 40).background(Color.black)) // Default notch view
+        }
         self.autoManageNotchStyle = style == nil
         if let specifiedStyle = style {
             self.notchStyle = specifiedStyle
@@ -40,7 +44,7 @@ public class DynamicNotch: ObservableObject {
     }
 
     // MARK: Public methods
-    
+
     /// Set this DynamicNotch's content.
     /// - Parameter content: A SwiftUI View
     public func setContent<Content: View>(content: Content) {
@@ -72,7 +76,7 @@ public class DynamicNotch: ObservableObject {
             }
         }
     }
-    
+
     /// Hide the DynamicNotch.
     public func hide() {
         guard self.isVisible else { return }
@@ -95,7 +99,7 @@ public class DynamicNotch: ObservableObject {
             self.deinitializeWindow()
         }
     }
-    
+
     /// Toggle the DynamicNotch's visibility.
     public func toggle() {
         if self.isVisible {
@@ -104,7 +108,7 @@ public class DynamicNotch: ObservableObject {
             self.show()
         }
     }
-    
+
     /// Check if the cursor is inside the screen's notch area.
     /// - Returns: If the cursor is inside the notch area.
     public static func checkIfMouseIsInNotch() -> Bool {
@@ -129,11 +133,10 @@ public class DynamicNotch: ObservableObject {
            let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
 
             let notchHeight = screen.safeAreaInsets.top
-            let notchWidth = screen.frame.width - topLeftNotchpadding - topRightNotchpadding + 10 // 10 is for the top rounded part of the notch
+            let notchWidth = screen.frame.width - topLeftNotchpadding - topRightNotchpadding + 10
             return .init(width: notchWidth, height: notchHeight)
         }
 
-        // Assign the menubar height for screens without a notch
         let notchHeight = screen.frame.height - screen.visibleFrame.height
         let notchWidth: CGFloat = 220
         return .init(width: notchWidth, height: notchHeight)
