@@ -40,7 +40,7 @@ public struct ProgressRing: View {
                     .opacity(isLoaded ? 1 : 0)
             }
             .rotationEffect(.degrees(-90))
-            .padding(thickness/2)
+            .padding(thickness / 2)
             .onAppear {
                 DispatchQueue.main.async {
                     withAnimation(Animation.timingCurve(0.22, 1, 0.36, 1, duration: 1)) {
