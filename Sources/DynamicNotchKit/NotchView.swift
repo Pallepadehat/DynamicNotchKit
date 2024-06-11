@@ -14,13 +14,11 @@ struct NotchView: View {
                         .frame(width: self.notchSize.width + 20, height: self.notchSize.height)
                         .background(Color.black)
 
-                    if self.dynamicNotch.isVisible {
-                        self.dynamicNotch.content
-                            .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
-                            .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
-                            .padding(.horizontal, 15)
-                            .frame(minHeight: 20)
-                    }
+                    self.dynamicNotch.content
+                        .blur(radius: self.dynamicNotch.isVisible ? 0 : 10)
+                        .scaleEffect(self.dynamicNotch.isVisible ? 1 : 0.8)
+                        .padding(.horizontal, 15)
+                        .frame(minHeight: 20)
                 }
                 .fixedSize()
                 .frame(minWidth: self.notchSize.width)
