@@ -53,7 +53,6 @@ public class DynamicNotch: ObservableObject {
         // Automatically show virtual notch on non-notch Macs
         if !hasPhysicalNotch() {
             self.notchStyle = .virtualNotch
-            show()
         }
     }
 
