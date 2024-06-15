@@ -24,8 +24,9 @@ struct NotchView: View {
                     // (the remaining 10 has already been accounted for in refreshNotchSize)
 
                     dynamicNotch.content
-                        .blur(radius: dynamicNotch.isVisible ? 0 : 10)
+                        .opacity(dynamicNotch.isVisible ? 1 : 0)
                         .scaleEffect(dynamicNotch.isVisible ? 1 : 0.8)
+                        .animation(Animation.spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3).delay(0.1), value: dynamicNotch.isVisible)
                         .padding(.horizontal, 15) // Small corner radius of the TOP of the notch
                         .frame(minHeight: 20)
                         .padding(.top, showContent ? 0 : -20)
