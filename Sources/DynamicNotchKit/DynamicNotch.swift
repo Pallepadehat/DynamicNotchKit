@@ -6,8 +6,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 0
-    @Published var notchHeight: CGFloat = 0
+    @Published var notchWidth: CGFloat
+    @Published var notchHeight: CGFloat
     @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
@@ -29,12 +29,16 @@ public class DynamicNotch: ObservableObject {
         case floating
     }
 
-    /// Makes a new DynamicNotch with custom content and style.
+    /// Makes a new DynamicNotch with custom content, style, width, and height.
     /// - Parameters:
     ///   - content: A SwiftUI View
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    public init(content: some View, style: DynamicNotch.Style! = nil) {
+    ///   - width: Optional width of the notch. Default is 300.
+    ///   - height: Optional height of the notch. Default is 24.
+    public init(content: some View, style: DynamicNotch.Style! = nil, width: CGFloat = 300, height: CGFloat = 24) {
         self.content = AnyView(content)
+        self.notchWidth = width
+        self.notchHeight = height
 
         if style == nil {
             self.autoManageNotchStyle = true
