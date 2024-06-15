@@ -27,10 +27,6 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    public enum Style {
-        case notch
-    }
-
     /// Makes a new DynamicNotch with custom content.
     /// - Parameters:
     ///   - content: A SwiftUI View
@@ -150,6 +146,12 @@ public class DynamicNotch: ObservableObject {
         return .init(width: notchWidth, height: menuBarHeight)
     }
 
+    private func refreshNotchSize(_ screen: NSScreen) {
+        let notchSize = DynamicNotch.getNotchSize(screen: screen)
+        notchWidth = notchSize.width
+        notchHeight = notchSize.height
+    }
+
     private func initializeWindow(screen: NSScreen) {
         // so that we don't have a duplicate window
         deinitializeWindow()
@@ -182,12 +184,6 @@ public class DynamicNotch: ObservableObject {
         )
 
         windowController = .init(window: panel)
-    }
-
-    private func refreshNotchSize(_ screen: NSScreen) {
-        let notchSize = DynamicNotch.getNotchSize(screen: screen)
-        notchWidth = notchSize.width
-        notchHeight = notchSize.height
     }
 
     private func deinitializeWindow() {

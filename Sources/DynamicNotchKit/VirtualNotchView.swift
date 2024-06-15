@@ -1,6 +1,6 @@
 //
-//  NotchlessView.swift
-//
+//  VirtualNotchView.swift
+//  DynamicNotchApp
 //
 //  Created by Kai Azim on 2024-04-06.
 //

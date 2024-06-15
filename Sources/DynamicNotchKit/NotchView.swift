@@ -1,6 +1,6 @@
 //
 //  NotchView.swift
-//
+//  DynamicNotchApp
 //
 //  Created by Kai Azim on 2023-08-24.
 //
