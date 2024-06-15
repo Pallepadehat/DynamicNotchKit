@@ -13,11 +13,13 @@ struct NotchView: View {
                         .frame(width: notch.notchWidth + 20, height: notch.notchHeight)
                         .background(Color.black)
 
-                    notch.content
-                        .blur(radius: notch.isVisible ? 0 : 10)
-                        .scaleEffect(notch.isVisible ? 1 : 0.8)
-                        .padding(.horizontal, 15)
-                        .frame(minHeight: 20)
+                    if notch.showContent {
+                        notch.content
+                            .blur(radius: notch.isVisible ? 0 : 10)
+                            .scaleEffect(notch.isVisible ? 1 : 0.8)
+                            .padding(.horizontal, 15)
+                            .frame(minHeight: 20)
+                    }
                 }
                 .fixedSize()
                 .frame(minWidth: notch.notchWidth)
@@ -48,4 +50,3 @@ struct NotchView: View {
         }
     }
 }
-

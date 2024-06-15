@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import AppKit
 
 extension NSScreen {
     public static var primaryScreen: NSScreen {
