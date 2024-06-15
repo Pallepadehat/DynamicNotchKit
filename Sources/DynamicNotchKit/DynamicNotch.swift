@@ -35,9 +35,8 @@ public class DynamicNotch: ObservableObject {
             self.notchStyle = style!
         }
 
-        // Show the notch on application start
         DispatchQueue.main.async {
-            self.show()
+            self.setupNotch()
         }
     }
 
@@ -50,7 +49,6 @@ public class DynamicNotch: ObservableObject {
     }
 
     public func show(on screen: NSScreen = NSScreen.primaryScreen, for time: Double = 0) {
-        print("Showing notch")
         if self.isVisible { return }
         self.initializeWindow(screen: screen)
 
@@ -68,7 +66,6 @@ public class DynamicNotch: ObservableObject {
     }
 
     public func hide() {
-        print("Hiding notch")
         guard self.isVisible else { return }
 
         guard !self.isMouseInside else {
@@ -87,12 +84,20 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    public func toggle() {
-        print("Toggling notch visibility")
+    private func toggle() {
         if self.isVisible {
             self.hide()
         } else {
             self.show()
+        }
+    }
+
+    private func setupNotch() {
+        if autoManageNotchStyle, !DynamicNotch.hasPhysicalNotch(screen: NSScreen.primaryScreen) {
+            print("Using virtual notch")
+            self.toggle()
+        } else {
+            print("Detected physical notch")
         }
     }
 
@@ -103,10 +108,8 @@ public class DynamicNotch: ObservableObject {
 
         if autoManageNotchStyle, DynamicNotch.hasPhysicalNotch(screen: screen) {
             notchStyle = .notch
-            print("Detected physical notch")
         } else {
             notchStyle = .virtualNotch
-            print("Using virtual notch")
         }
 
         refreshNotchSize(screen)
@@ -142,7 +145,6 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func deinitializeWindow() {
-        print("Deinitializing window")
         guard let windowController = self.windowController else { return }
         windowController.close()
         self.windowController = nil
