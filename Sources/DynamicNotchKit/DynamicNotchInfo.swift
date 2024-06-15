@@ -69,17 +69,17 @@ public class DynamicNotchInfo: DynamicNotch {
 
     /// Set new content for the DynamicNotchInfoWindow, with an SF Symbol as the icon.
     /// - Parameters:
-    ///   - systemImage: String
-    ///   - iconColor: Color
-    ///   - title: String
-    ///   - description: String?
+    ///   - systemImage: The SF Symbol's name
+    ///   - iconColor: The color of the icon
+    ///   - title: A title for your content
+    ///   - description: An optional description for your content
     public func setContent(systemImage: String, iconColor: Color = .white, title: String, description: String? = nil) {
         setContent(icon: Image(systemName: systemImage), iconColor: iconColor, title: title, description: description)
     }
 
     // MARK: Private
 
-    public static func getView(iconView: some View, title: String, description: String! = nil, notchStyle _: DynamicNotch.Style) -> some View {
+    private static func getView(iconView: some View, title: String, description: String! = nil, notchStyle _: DynamicNotch.Style) -> some View {
         var infoView: some View {
             HStack {
                 iconView
