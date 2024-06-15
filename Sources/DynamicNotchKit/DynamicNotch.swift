@@ -2,7 +2,7 @@ import SwiftUI
 import Cocoa
 
 public class DynamicNotch: ObservableObject {
-    @Published public var isVisible: Bool = true
+    @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
     @Published var notchWidth: CGFloat
     @Published var notchHeight: CGFloat
@@ -50,6 +50,7 @@ public class DynamicNotch: ObservableObject {
     }
 
     public func show(on screen: NSScreen = NSScreen.primaryScreen, for time: Double = 0) {
+        print("Showing notch")
         if self.isVisible { return }
         self.initializeWindow(screen: screen)
 
@@ -67,6 +68,7 @@ public class DynamicNotch: ObservableObject {
     }
 
     public func hide() {
+        print("Hiding notch")
         guard self.isVisible else { return }
 
         guard !self.isMouseInside else {
@@ -86,6 +88,7 @@ public class DynamicNotch: ObservableObject {
     }
 
     public func toggle() {
+        print("Toggling notch visibility")
         if self.isVisible {
             self.hide()
         } else {
@@ -139,6 +142,7 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func deinitializeWindow() {
+        print("Deinitializing window")
         guard let windowController = self.windowController else { return }
         windowController.close()
         self.windowController = nil
