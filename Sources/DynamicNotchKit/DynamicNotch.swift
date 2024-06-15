@@ -20,11 +20,7 @@ public class DynamicNotch: ObservableObject {
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        if #available(macOS 14.0, *) {
-            return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
-        } else {
-            return .easeInOut(duration: 0.5)
-        }
+        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
     }
 
     /// Makes a new DynamicNotch with custom content.
@@ -68,6 +64,20 @@ public class DynamicNotch: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + time) {
                 self.hide()
             }
+        }
+    }
+
+    /// Show the DynamicNotch for a specified duration and then hide it.
+    /// - Parameters:
+    ///   - content: The content to display in the notch.
+    ///   - duration: The time in seconds to show the content.
+    public func showFor(content: some View, duration: Double) {
+        setContent(content: content)
+        show()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.setContent(content: EmptyView())
+            self.setNotchSize(width: 300, height: 20)
         }
     }
 
