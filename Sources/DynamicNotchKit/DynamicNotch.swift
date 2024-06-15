@@ -1,6 +1,6 @@
 //
 //  DynamicNotch.swift
-//  DynamicNotchKit
+//
 //
 //  Created by Kai Azim on 2023-08-24.
 //
@@ -13,34 +13,58 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 300
-    @Published var notchHeight: CGFloat = 20
+    @Published var notchWidth: CGFloat = 0
+    @Published var notchHeight: CGFloat = 0
+    @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
+        if #available(macOS 14.0, *), notchStyle == .notch {
+            Animation.spring(.bouncy(duration: 0.4))
+        } else {
+            Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
+        }
     }
 
-    /// Makes a new DynamicNotch with custom content.
+    // If true, DynamicNotchKit will use the .notch/.floating style according to the screen.
+    private let autoManageNotchStyle: Bool
+    public enum Style {
+        case notch
+        case floating
+        case virtualNotch // Added for virtual notch
+    }
+
+    /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
     ///   - content: A SwiftUI View
-    public init(content: some View = EmptyView()) {
+    ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
+    public init(content: some View, style: DynamicNotch.Style! = nil) {
         self.content = AnyView(content)
-        self.autoShowNotchIfNeeded()
+
+        if style == nil {
+            self.autoManageNotchStyle = true
+        } else {
+            self.autoManageNotchStyle = false
+            self.notchStyle = style
+        }
+
+        // Automatically show virtual notch on non-notch Macs
+        if !hasPhysicalNotch() {
+            self.notchStyle = .virtualNotch
+            show()
+        }
     }
 
     // MARK: Public methods
 
-    /// Set this DynamicNotch's content with animation.
+    /// Set this DynamicNotch's content.
     /// - Parameter content: A SwiftUI View
     public func setContent(content: some View) {
-        withAnimation(animation) {
-            self.content = AnyView(content)
-            if let windowController {
-                windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
-            }
+        self.content = AnyView(content)
+        if let windowController {
+            windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
         }
     }
 
@@ -64,20 +88,6 @@ public class DynamicNotch: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + time) {
                 self.hide()
             }
-        }
-    }
-
-    /// Show the DynamicNotch for a specified duration and then hide it.
-    /// - Parameters:
-    ///   - content: The content to display in the notch.
-    ///   - duration: The time in seconds to show the content.
-    public func showFor(content: some View, duration: Double) {
-        setContent(content: content)
-        show()
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            self.setContent(content: EmptyView())
-            self.setNotchSize(width: 300, height: 20)
         }
     }
 
@@ -110,20 +120,6 @@ public class DynamicNotch: ObservableObject {
             hide()
         } else {
             show()
-        }
-    }
-
-    /// Set the size of the notch with animation.
-    /// - Parameters:
-    ///   - width: The width of the notch.
-    ///   - height: The height of the notch.
-    public func setNotchSize(width: CGFloat, height: CGFloat) {
-        withAnimation(animation) {
-            notchWidth = width
-            notchHeight = height
-            if let windowController {
-                windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
-            }
         }
     }
 
@@ -162,6 +158,14 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func refreshNotchSize(_ screen: NSScreen) {
+        if autoManageNotchStyle,
+           let topLeftNotchpadding: CGFloat = screen.auxiliaryTopLeftArea?.width,
+           let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
+            notchStyle = .notch
+        } else {
+            notchStyle = .floating
+        }
+
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
         notchWidth = notchSize.width
         notchHeight = notchSize.height
@@ -173,7 +177,13 @@ public class DynamicNotch: ObservableObject {
 
         refreshNotchSize(screen)
 
-        let view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+        var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+
+        if notchStyle == .floating {
+            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
+        } else if notchStyle == .virtualNotch {
+            view = NSHostingView(rootView: VirtualNotchView(dynamicNotch: self))
+        }
 
         let panel = NSPanel(
             contentRect: .zero,
@@ -188,20 +198,15 @@ public class DynamicNotch: ObservableObject {
         panel.contentView = view
         panel.orderFrontRegardless()
 
-        DispatchQueue.main.async {
-            let frame = screen.frame
-            let notchHeight = self.notchHeight
-            let panelY = frame.maxY - notchHeight
-            panel.setFrame(
-                NSRect(
-                    x: frame.midX - (self.notchWidth / 2),
-                    y: panelY,
-                    width: self.notchWidth,
-                    height: notchHeight
-                ),
-                display: true
-            )
-        }
+        panel.setFrame(
+            NSRect(
+                x: screen.frame.origin.x,
+                y: screen.frame.origin.y,
+                width: screen.frame.width,
+                height: screen.frame.height
+            ),
+            display: false
+        )
 
         windowController = .init(window: panel)
     }
@@ -212,15 +217,12 @@ public class DynamicNotch: ObservableObject {
         self.windowController = nil
     }
 
-    private func autoShowNotchIfNeeded() {
-        if !hasNotch() {
-            show()
-        }
-    }
-
-    private func hasNotch() -> Bool {
-        if let screen = NSScreen.screens.first {
-            return screen.auxiliaryTopLeftArea != nil && screen.auxiliaryTopRightArea != nil
+    private func hasPhysicalNotch() -> Bool {
+        // Check if any screen has a physical notch
+        for screen in NSScreen.screens {
+            if screen.auxiliaryTopLeftArea != nil && screen.auxiliaryTopRightArea != nil {
+                return true
+            }
         }
         return false
     }
