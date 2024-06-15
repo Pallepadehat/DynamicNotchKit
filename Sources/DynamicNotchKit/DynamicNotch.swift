@@ -23,6 +23,7 @@ public class DynamicNotch: ObservableObject {
 
     // If true, DynamicNotchKit will use the .notch/.floating style according to the screen.
     private let autoManageNotchStyle: Bool
+
     public enum Style {
         case notch
         case floating
