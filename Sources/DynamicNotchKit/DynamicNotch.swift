@@ -20,7 +20,7 @@ public class DynamicNotch: ObservableObject {
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
+        return .easeInOut(duration: animationDuration)
     }
 
     /// Makes a new DynamicNotch with custom content.
@@ -222,3 +222,4 @@ public class DynamicNotch: ObservableObject {
         return false
     }
 }
+
