@@ -159,7 +159,7 @@ public class DynamicNotch: ObservableObject {
            let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
             notchStyle = .notch
         } else {
-            notchStyle = .floating
+            notchStyle = .notch
         }
 
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
