@@ -12,10 +12,10 @@ public class DynamicNotch: ObservableObject {
     public var windowController: NSWindowController? // In case user wants to modify the NSPanel
 
     @Published public var isVisible: Bool = false
-    @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 0
-    @Published var notchHeight: CGFloat = 0
-    @Published var notchStyle: Style = .notch
+    @Published public var isMouseInside: Bool = false
+    @Published public var notchWidth: CGFloat = 0
+    @Published public var notchHeight: CGFloat = 0
+    @Published public var notchStyle: Style = .notch
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
