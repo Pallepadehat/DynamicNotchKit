@@ -72,7 +72,11 @@ public class DynamicNotch: ObservableObject {
     ///   - screen: Screen to show on. Default is the primary screen.
     ///   - time: Time to show in seconds. If 0, the DynamicNotch will stay visible until `hide()` is called.
     public func show(on screen: NSScreen = NSScreen.screens[0], for time: Double = 0) {
-        if isVisible { return }
+        print("Attempting to show DynamicNotch")
+        if isVisible {
+            print("DynamicNotch is already visible")
+            return
+        }
         timer?.invalidate()
 
         initializeWindow(screen: screen)
@@ -80,11 +84,13 @@ public class DynamicNotch: ObservableObject {
         DispatchQueue.main.async {
             withAnimation(self.animation) {
                 self.isVisible = true
+                print("DynamicNotch is now visible")
             }
         }
 
         if time != 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                print("Attempting to hide DynamicNotch after \(time) seconds")
                 self.hide()
             }
         }
@@ -92,7 +98,11 @@ public class DynamicNotch: ObservableObject {
 
     /// Hide the DynamicNotch.
     public func hide() {
-        guard isVisible else { return }
+        print("Attempting to hide DynamicNotch")
+        guard isVisible else {
+            print("DynamicNotch is already hidden")
+            return
+        }
 
         guard !isMouseInside else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -103,6 +113,7 @@ public class DynamicNotch: ObservableObject {
 
         withAnimation(animation) {
             self.isVisible = false
+            print("DynamicNotch is now hidden")
         }
 
         timer = Timer.scheduledTimer(
