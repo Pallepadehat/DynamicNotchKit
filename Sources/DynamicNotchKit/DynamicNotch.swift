@@ -13,14 +13,14 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 250
-    @Published var notchHeight: CGFloat = 40
+    @Published var notchWidth: CGFloat = 300
+    @Published var notchHeight: CGFloat = 20
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        return .easeInOut(duration: animationDuration)
+        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
     }
 
     /// Makes a new DynamicNotch with custom content.
@@ -77,7 +77,7 @@ public class DynamicNotch: ObservableObject {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
             self.setContent(content: EmptyView())
-            self.setNotchSize(width: 250, height: 40)
+            self.setNotchSize(width: 300, height: 20)
         }
     }
 
@@ -189,14 +189,17 @@ public class DynamicNotch: ObservableObject {
         panel.orderFrontRegardless()
 
         DispatchQueue.main.async {
+            let frame = screen.frame
+            let notchHeight = self.notchHeight
+            let panelY = frame.maxY - notchHeight
             panel.setFrame(
                 NSRect(
-                    x: screen.frame.origin.x,
-                    y: screen.frame.origin.y,
-                    width: screen.frame.width,
-                    height: screen.frame.height
+                    x: frame.midX - (self.notchWidth / 2),
+                    y: panelY,
+                    width: self.notchWidth,
+                    height: notchHeight
                 ),
-                display: false
+                display: true
             )
         }
 
@@ -222,4 +225,3 @@ public class DynamicNotch: ObservableObject {
         return false
     }
 }
-
