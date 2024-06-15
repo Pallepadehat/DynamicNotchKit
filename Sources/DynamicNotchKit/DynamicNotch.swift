@@ -1,10 +1,3 @@
-//
-//  DynamicNotch.swift
-//
-//
-//  Created by Kai Azim on 2023-08-24.
-//
-
 import SwiftUI
 
 public class DynamicNotch: ObservableObject {
@@ -47,6 +40,13 @@ public class DynamicNotch: ObservableObject {
         } else {
             self.autoManageNotchStyle = false
             self.notchStyle = style
+        }
+
+        // Automatically determine if the screen has a notch and set the style
+        if self.autoManageNotchStyle {
+            if let screen = NSScreen.screens.first {
+                self.refreshNotchSize(screen)
+            }
         }
     }
 
@@ -156,7 +156,7 @@ public class DynamicNotch: ObservableObject {
            let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
             notchStyle = .notch
         } else {
-            notchStyle = .floating
+            notchStyle = .notch
         }
 
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
