@@ -94,15 +94,20 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func initializeWindow(screen: NSScreen) {
+        print("Initializing window for notch")
+
         self.deinitializeWindow()
 
         if autoManageNotchStyle, DynamicNotch.hasPhysicalNotch(screen: screen) {
             notchStyle = .notch
+            print("Detected physical notch")
         } else {
             notchStyle = .virtualNotch
+            print("Using virtual notch")
         }
 
         refreshNotchSize(screen)
+        print("Notch size - Width: \(notchWidth), Height: \(notchHeight)")
 
         let view: NSView = NSHostingView(rootView: NotchView(notch: self))
 
@@ -115,7 +120,7 @@ public class DynamicNotch: ObservableObject {
         panel.hasShadow = false
         panel.backgroundColor = .clear
         panel.level = .screenSaver
-        panel.collectionBehavior = .canJoinAllSpaces
+        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.contentView = view
         panel.orderFrontRegardless()
 
@@ -130,6 +135,7 @@ public class DynamicNotch: ObservableObject {
         )
 
         self.windowController = NSWindowController(window: panel)
+        print("Window initialized and shown")
     }
 
     private func deinitializeWindow() {
