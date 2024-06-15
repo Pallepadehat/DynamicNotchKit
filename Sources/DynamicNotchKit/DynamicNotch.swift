@@ -14,11 +14,6 @@ public class DynamicNotch: ObservableObject {
     private let animationDuration: Double = 0.4
     private let autoManageNotchStyle: Bool
 
-    public enum Style {
-        case notch
-        case virtualNotch
-    }
-
     private var animation: Animation {
         Animation.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.25)
     }
@@ -26,12 +21,7 @@ public class DynamicNotch: ObservableObject {
     public init(width: CGFloat, height: CGFloat, style: Style? = nil) {
         self.notchWidth = width
         self.notchHeight = height
-
-        if style == nil {
-            self.autoManageNotchStyle = true
-        } else {
-            self.autoManageNotchStyle = false
-        }
+        self.autoManageNotchStyle = style == nil
 
         DispatchQueue.main.async {
             self.setupNotch()
