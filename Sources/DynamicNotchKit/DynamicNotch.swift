@@ -84,17 +84,9 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    private func toggle() {
-        if self.isVisible {
-            self.hide()
-        } else {
-            self.show()
-        }
-    }
-
     private func setupNotch() {
         if autoManageNotchStyle, !DynamicNotch.hasPhysicalNotch(screen: NSScreen.primaryScreen) {
-            self.toggle()
+            self.show()
         }
     }
 
