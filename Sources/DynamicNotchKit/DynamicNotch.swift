@@ -13,8 +13,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 0
-    @Published var notchHeight: CGFloat = 0
+    @Published var notchWidth: CGFloat = 300
+    @Published var notchHeight: CGFloat = 20
     @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
@@ -116,6 +116,18 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
+    /// Set the size of the notch.
+    /// - Parameters:
+    ///   - width: The width of the notch.
+    ///   - height: The height of the notch.
+    public func setNotchSize(width: CGFloat, height: CGFloat) {
+        notchWidth = width
+        notchHeight = height
+        if let windowController {
+            windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+        }
+    }
+
     /// Check if the cursor is inside the screen's notch area.
     /// - Returns: If the cursor is inside the notch area.
     public static func checkIfMouseIsInNotch() -> Bool {
@@ -173,7 +185,7 @@ public class DynamicNotch: ObservableObject {
         var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
 
         if notchStyle == .floating {
-            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
+            view = NSHostingView(rootView: VirtualNotchView(dynamicNotch: self))
         }
 
         let panel = NSPanel(

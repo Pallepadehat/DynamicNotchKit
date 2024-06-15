@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct NotchlessView: View {
+struct VirtualNotchView: View {
     @ObservedObject var dynamicNotch: DynamicNotch
-    @State var windowHeight: CGFloat = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -17,6 +16,7 @@ struct NotchlessView: View {
                 Spacer()
 
                 dynamicNotch.content
+                    .frame(width: dynamicNotch.notchWidth, height: dynamicNotch.notchHeight)
                     .fixedSize()
                     .onHover { hovering in
                         dynamicNotch.isMouseInside = hovering
@@ -31,15 +31,6 @@ struct NotchlessView: View {
                     .clipShape(.rect(cornerRadius: 20))
                     .shadow(color: .black.opacity(0.5), radius: dynamicNotch.isVisible ? 10 : 0)
                     .padding(20)
-                    .background {
-                        GeometryReader { geo in
-                            Color.clear
-                                .onAppear {
-                                    windowHeight = geo.size.height // This makes sure that the floating window FULLY slides off before disappearing
-                                }
-                        }
-                    }
-                    .offset(y: dynamicNotch.isVisible ? dynamicNotch.notchHeight : -windowHeight)
 
                 Spacer()
             }
