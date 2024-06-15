@@ -1,13 +1,12 @@
 //
 //  DynamicNotchInfo.swift
-//  DynamicNotchApp
+//  DynamicNotchKit
 //
 //  Created by Kai Azim on 2023-08-25.
 //
 
 import SwiftUI
 
-// BETA
 public class DynamicNotchInfo: DynamicNotch {
     // MARK: Initializers
 
@@ -17,7 +16,7 @@ public class DynamicNotchInfo: DynamicNotch {
     ///   - title: A title for your content
     ///   - description: An optional description for your content
     public init(iconView: some View, title: String, description: String! = nil) {
-        super.init(content: EmptyView()) // It is required to initialize the class first here so that dynamicNotch.notchStyle is not nil.
+        super.init(content: EmptyView())
         setContent(iconView: iconView, title: title, description: description)
     }
 

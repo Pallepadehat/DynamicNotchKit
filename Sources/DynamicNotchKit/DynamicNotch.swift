@@ -20,7 +20,11 @@ public class DynamicNotch: ObservableObject {
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
+        if #available(macOS 14.0, *) {
+            Animation.spring(.bouncy(duration: 0.4))
+        } else {
+            Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
+        }
     }
 
     /// Makes a new DynamicNotch with custom content.
