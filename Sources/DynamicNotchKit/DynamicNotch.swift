@@ -13,8 +13,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 300
-    @Published var notchHeight: CGFloat = 20
+    @Published var notchWidth: CGFloat = 250
+    @Published var notchHeight: CGFloat = 40
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
