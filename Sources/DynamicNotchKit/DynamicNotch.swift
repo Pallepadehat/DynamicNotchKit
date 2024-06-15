@@ -173,16 +173,10 @@ public class DynamicNotch: ObservableObject {
         // so that we don't have a duplicate window
         deinitializeWindow()
 
-        refreshNotchSize(screen)
-
-        var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
-
-        if notchStyle == .floating {
-            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
-        }
+        let view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
 
         let panel = NSPanel(
-            contentRect: .zero,
+            contentRect: NSRect(x: 0, y: 0, width: notchWidth, height: notchHeight),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: true
@@ -196,12 +190,12 @@ public class DynamicNotch: ObservableObject {
 
         panel.setFrame(
             NSRect(
-                x: screen.frame.origin.x,
-                y: screen.frame.origin.y,
-                width: screen.frame.width,
-                height: screen.frame.height
+                x: screen.frame.midX - notchWidth / 2,
+                y: screen.frame.maxY - notchHeight,
+                width: notchWidth,
+                height: notchHeight
             ),
-            display: false
+            display: true
         )
 
         windowController = .init(window: panel)
