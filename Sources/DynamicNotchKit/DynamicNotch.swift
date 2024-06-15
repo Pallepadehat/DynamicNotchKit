@@ -174,15 +174,17 @@ public class DynamicNotch: ObservableObject {
         panel.contentView = view
         panel.orderFrontRegardless()
 
-        panel.setFrame(
-            NSRect(
-                x: screen.frame.origin.x,
-                y: screen.frame.origin.y,
-                width: screen.frame.width,
-                height: screen.frame.height
-            ),
-            display: false
-        )
+        DispatchQueue.main.async {
+            panel.setFrame(
+                NSRect(
+                    x: screen.frame.origin.x,
+                    y: screen.frame.origin.y,
+                    width: screen.frame.width,
+                    height: screen.frame.height
+                ),
+                display: false
+            )
+        }
 
         windowController = .init(window: panel)
     }
