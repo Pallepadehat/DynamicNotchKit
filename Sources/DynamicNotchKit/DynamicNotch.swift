@@ -13,6 +13,11 @@ public class DynamicNotch: ObservableObject {
     private var timer: Timer?
     private let animationDuration: Double = 0.4
     private let autoManageNotchStyle: Bool
+    
+    public enum Style {
+           case notch
+           case virtualNotch
+       }
 
     private var animation: Animation {
         Animation.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.25)
