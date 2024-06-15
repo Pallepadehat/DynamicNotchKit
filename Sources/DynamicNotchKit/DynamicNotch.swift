@@ -30,7 +30,7 @@ public class DynamicNotch: ObservableObject {
     /// Makes a new DynamicNotch with custom content.
     /// - Parameters:
     ///   - content: A SwiftUI View
-    public init(content: some View) {
+    public init(content: some View = EmptyView()) {
         self.content = AnyView(content)
         self.autoShowNotchIfNeeded()
     }
