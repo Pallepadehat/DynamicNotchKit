@@ -13,18 +13,14 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 300
-    @Published var notchHeight: CGFloat = 20
+    @Published var notchWidth: CGFloat = 250
+    @Published var notchHeight: CGFloat = 40
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
 
     private var animation: Animation {
-        if #available(macOS 14.0, *) {
-            Animation.spring(.bouncy(duration: 0.4))
-        } else {
-            Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
-        }
+        return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
     }
 
     /// Makes a new DynamicNotch with custom content.
@@ -81,7 +77,7 @@ public class DynamicNotch: ObservableObject {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
             self.setContent(content: EmptyView())
-            self.setNotchSize(width: 300, height: 20)
+            self.setNotchSize(width: 250, height: 40)
         }
     }
 
