@@ -10,7 +10,6 @@ import SwiftUI
 public class DynamicNotch: ObservableObject {
     public var content: AnyView
     public var windowController: NSWindowController? // In case user wants to modify the NSPanel
-    private var alwaysShowNotch: Bool
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
@@ -40,10 +39,8 @@ public class DynamicNotch: ObservableObject {
     /// - Parameters:
     ///   - content: A SwiftUI View
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    ///   - alwaysShowNotch: Bool indicating whether to always show the notch on non-notch Macs
-    public init(content: some View, style: DynamicNotch.Style! = nil, alwaysShowNotch: Bool = false) {
+    public init(content: some View, style: DynamicNotch.Style! = nil) {
         self.content = AnyView(content)
-        self.alwaysShowNotch = alwaysShowNotch
 
         if style == nil {
             self.autoManageNotchStyle = true
@@ -154,12 +151,12 @@ public class DynamicNotch: ObservableObject {
     }
 
     private func refreshNotchSize(_ screen: NSScreen) {
-        if autoManageNotchStyle || alwaysShowNotch,
+        if autoManageNotchStyle,
            let topLeftNotchpadding: CGFloat = screen.auxiliaryTopLeftArea?.width,
            let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
             notchStyle = .notch
         } else {
-            notchStyle = .notch
+            notchStyle = .floating
         }
 
         let notchSize = DynamicNotch.getNotchSize(screen: screen)
