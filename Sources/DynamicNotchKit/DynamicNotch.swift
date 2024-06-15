@@ -7,7 +7,6 @@ public class DynamicNotch: ObservableObject {
     @Published var notchWidth: CGFloat
     @Published var notchHeight: CGFloat
     @Published var content: AnyView = AnyView(EmptyView())
-    @Published var notchStyle: Style = .notch
     @Published var showContent: Bool = false
 
     private var windowController: NSWindowController?
@@ -32,7 +31,6 @@ public class DynamicNotch: ObservableObject {
             self.autoManageNotchStyle = true
         } else {
             self.autoManageNotchStyle = false
-            self.notchStyle = style!
         }
 
         DispatchQueue.main.async {
@@ -43,8 +41,12 @@ public class DynamicNotch: ObservableObject {
     public func setContent<Content: View>(content: Content) {
         self.content = AnyView(content)
         self.showContent = true
-        if let windowController = self.windowController {
-            windowController.window?.contentView = NSHostingView(rootView: NotchView(notch: self))
+        self.updateWindowContent()
+    }
+
+    private func setupNotch() {
+        if autoManageNotchStyle, !DynamicNotch.hasPhysicalNotch(screen: NSScreen.primaryScreen) {
+            self.show()
         }
     }
 
@@ -68,13 +70,6 @@ public class DynamicNotch: ObservableObject {
     public func hide() {
         guard self.isVisible else { return }
 
-        guard !self.isMouseInside else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.hide()
-            }
-            return
-        }
-
         withAnimation(self.animation) {
             self.isVisible = false
         }
@@ -84,33 +79,11 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    private func toggle() {
-        if self.isVisible {
-            self.hide()
-        } else {
-            self.show()
-        }
-    }
-
-    private func setupNotch() {
-        if autoManageNotchStyle, !DynamicNotch.hasPhysicalNotch(screen: NSScreen.primaryScreen) {
-            self.show()
-        }
-    }
-
     private func initializeWindow(screen: NSScreen) {
         self.deinitializeWindow()
-
-        if autoManageNotchStyle, DynamicNotch.hasPhysicalNotch(screen: screen) {
-            notchStyle = .notch
-        } else {
-            notchStyle = .virtualNotch
-        }
-
-        refreshNotchSize(screen)
+        self.refreshNotchSize(screen)
 
         let view: NSView = NSHostingView(rootView: NotchView(notch: self))
-
         let panel = NSPanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -164,5 +137,11 @@ public class DynamicNotch: ObservableObject {
 
     private static func hasPhysicalNotch(screen: NSScreen) -> Bool {
         return screen.safeAreaInsets.top > 0
+    }
+
+    private func updateWindowContent() {
+        if let windowController = self.windowController {
+            windowController.window?.contentView = NSHostingView(rootView: NotchView(notch: self))
+        }
     }
 }
