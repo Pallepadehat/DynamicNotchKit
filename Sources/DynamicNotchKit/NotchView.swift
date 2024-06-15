@@ -1,6 +1,6 @@
 //
 //  NotchView.swift
-//  DynamicNotchApp
+//  DynamicNotchKit
 //
 //  Created by Kai Azim on 2023-08-24.
 //
@@ -9,9 +9,8 @@ import SwiftUI
 
 struct NotchView: View {
     @ObservedObject var dynamicNotch: DynamicNotch
-    @State var notchSize: NSSize = .zero
-
-    @State private var isInfo: Bool = false
+    @State private var notchSize: NSSize = .zero
+    @State private var showContent: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -29,7 +28,14 @@ struct NotchView: View {
                         .scaleEffect(dynamicNotch.isVisible ? 1 : 0.8)
                         .padding(.horizontal, 15) // Small corner radius of the TOP of the notch
                         .frame(minHeight: 20)
-                        .padding(.top, isInfo ? -20 : 0)
+                        .padding(.top, showContent ? 0 : -20)
+                        .animation(dynamicNotch.isVisible ? .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3) : .none, value: showContent)
+                        .onAppear {
+                            showContent = true
+                        }
+                        .onDisappear {
+                            showContent = false
+                        }
                 }
                 .fixedSize()
                 .frame(minWidth: notchSize.width)
@@ -65,10 +71,6 @@ struct NotchView: View {
                 width: dynamicNotch.notchWidth,
                 height: dynamicNotch.notchHeight
             )
-
-            if dynamicNotch as? DynamicNotchInfo != nil {
-                isInfo = true
-            }
         }
     }
 }

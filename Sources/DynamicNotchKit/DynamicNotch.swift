@@ -21,9 +21,9 @@ public class DynamicNotch: ObservableObject {
 
     private var animation: Animation {
         if #available(macOS 14.0, *) {
-            Animation.spring(.bouncy(duration: 0.4))
+            return .spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.3)
         } else {
-            Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
+            return .easeInOut(duration: 0.5)
         }
     }
 
@@ -37,12 +37,14 @@ public class DynamicNotch: ObservableObject {
 
     // MARK: Public methods
 
-    /// Set this DynamicNotch's content.
+    /// Set this DynamicNotch's content with animation.
     /// - Parameter content: A SwiftUI View
     public func setContent(content: some View) {
-        self.content = AnyView(content)
-        if let windowController {
-            windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+        withAnimation(animation) {
+            self.content = AnyView(content)
+            if let windowController {
+                windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+            }
         }
     }
 
@@ -101,15 +103,17 @@ public class DynamicNotch: ObservableObject {
         }
     }
 
-    /// Set the size of the notch.
+    /// Set the size of the notch with animation.
     /// - Parameters:
     ///   - width: The width of the notch.
     ///   - height: The height of the notch.
     public func setNotchSize(width: CGFloat, height: CGFloat) {
-        notchWidth = width
-        notchHeight = height
-        if let windowController {
-            windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+        withAnimation(animation) {
+            notchWidth = width
+            notchHeight = height
+            if let windowController {
+                windowController.window?.contentView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+            }
         }
     }
 
