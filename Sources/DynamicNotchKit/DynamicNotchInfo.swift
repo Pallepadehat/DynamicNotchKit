@@ -1,10 +1,3 @@
-//
-//  DynamicNotchInfo.swift
-//  
-//
-//  Created by Patrick Jakobsen on 15/06/2024.
-//
-
 import SwiftUI
 
 public class DynamicNotchInfo: DynamicNotch {
