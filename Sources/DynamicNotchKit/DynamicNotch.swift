@@ -1,6 +1,6 @@
 //
 //  DynamicNotch.swift
-//  DynamicNotchApp
+//  DynamicNotchKit
 //
 //  Created by Kai Azim on 2023-08-24.
 //
@@ -13,8 +13,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat = 250
-    @Published var notchHeight: CGFloat = 40
+    @Published var notchWidth: CGFloat = 300
+    @Published var notchHeight: CGFloat = 20
 
     private var timer: Timer?
     private let animationDuration: Double = 0.4
@@ -32,6 +32,7 @@ public class DynamicNotch: ObservableObject {
     ///   - content: A SwiftUI View
     public init(content: some View) {
         self.content = AnyView(content)
+        self.autoShowNotchIfNeeded()
     }
 
     // MARK: Public methods
@@ -190,5 +191,18 @@ public class DynamicNotch: ObservableObject {
         guard let windowController else { return }
         windowController.close()
         self.windowController = nil
+    }
+
+    private func autoShowNotchIfNeeded() {
+        if !hasNotch() {
+            show()
+        }
+    }
+
+    private func hasNotch() -> Bool {
+        if let screen = NSScreen.screens.first {
+            return screen.auxiliaryTopLeftArea != nil && screen.auxiliaryTopRightArea != nil
+        }
+        return false
     }
 }
