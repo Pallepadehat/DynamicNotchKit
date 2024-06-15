@@ -44,7 +44,7 @@ public struct ProgressRing: View {
             .onAppear {
                 DispatchQueue.main.async {
                     withAnimation(Animation.timingCurve(0.22, 1, 0.36, 1, duration: 1)) {
-                        self.isLoaded = true
+                        isLoaded = true
                     }
                 }
             }
