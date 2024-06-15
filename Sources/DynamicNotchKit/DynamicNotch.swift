@@ -6,8 +6,8 @@ public class DynamicNotch: ObservableObject {
 
     @Published public var isVisible: Bool = false
     @Published var isMouseInside: Bool = false
-    @Published var notchWidth: CGFloat
-    @Published var notchHeight: CGFloat
+    @Published var notchWidth: CGFloat = 0
+    @Published var notchHeight: CGFloat = 0
     @Published var notchStyle: Style = .notch
 
     private var timer: Timer?
@@ -29,16 +29,12 @@ public class DynamicNotch: ObservableObject {
         case floating
     }
 
-    /// Makes a new DynamicNotch with custom content, style, width, and height.
+    /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
     ///   - content: A SwiftUI View
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    ///   - width: Optional width of the notch. Default is 300.
-    ///   - height: Optional height of the notch. Default is 24.
-    public init(content: some View, style: DynamicNotch.Style! = nil, width: CGFloat = 300, height: CGFloat = 24) {
+    public init(content: some View, style: DynamicNotch.Style! = nil) {
         self.content = AnyView(content)
-        self.notchWidth = width
-        self.notchHeight = height
 
         if style == nil {
             self.autoManageNotchStyle = true
@@ -173,10 +169,16 @@ public class DynamicNotch: ObservableObject {
         // so that we don't have a duplicate window
         deinitializeWindow()
 
-        let view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+        refreshNotchSize(screen)
+
+        var view: NSView = NSHostingView(rootView: NotchView(dynamicNotch: self))
+
+        if notchStyle == .floating {
+            view = NSHostingView(rootView: NotchlessView(dynamicNotch: self))
+        }
 
         let panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: notchWidth, height: notchHeight),
+            contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: true
@@ -190,12 +192,12 @@ public class DynamicNotch: ObservableObject {
 
         panel.setFrame(
             NSRect(
-                x: screen.frame.midX - notchWidth / 2,
-                y: screen.frame.maxY - notchHeight,
-                width: notchWidth,
-                height: notchHeight
+                x: screen.frame.origin.x,
+                y: screen.frame.origin.y,
+                width: screen.frame.width,
+                height: screen.frame.height
             ),
-            display: true
+            display: false
         )
 
         windowController = .init(window: panel)

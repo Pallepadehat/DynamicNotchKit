@@ -1,3 +1,10 @@
+//
+//  DynamicNotchInfoWindow.swift
+//
+//
+//  Created by Kai Azim on 2023-08-25.
+//
+
 import SwiftUI
 
 // BETA
@@ -10,10 +17,8 @@ public class DynamicNotchInfo: DynamicNotch {
     ///   - title: A title for your content
     ///   - description: An optional description for your content
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    ///   - width: Optional width of the notch. Default is 300.
-    ///   - height: Optional height of the notch. Default is 24.
-    public init(iconView: some View, title: String, description: String! = nil, style: DynamicNotch.Style! = nil, width: CGFloat = 300, height: CGFloat = 24) {
-        super.init(content: EmptyView(), style: style, width: width, height: height) // It is required to initialize the class first here so that dynamicNotch.notchStyle is not nil.
+    public init(iconView: some View, title: String, description: String! = nil, style: DynamicNotch.Style! = nil) {
+        super.init(content: EmptyView(), style: style) // It is required to initialize the class first here so that dynamicNotch.notchStyle is not nil.
         setContent(iconView: iconView, title: title, description: description)
     }
 
@@ -24,11 +29,9 @@ public class DynamicNotchInfo: DynamicNotch {
     ///   - title: A title for your content
     ///   - description: An optional description for your content
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    ///   - width: Optional width of the notch. Default is 300.
-    ///   - height: Optional height of the notch. Default is 24.
-    public convenience init(icon: Image! = nil, iconColor: Color = .white, title: String, description: String? = nil, style: DynamicNotch.Style! = nil, width: CGFloat = 300, height: CGFloat = 24) {
+    public convenience init(icon: Image! = nil, iconColor: Color = .white, title: String, description: String? = nil, style: DynamicNotch.Style! = nil) {
         let iconView = DynamicNotchInfo.getIconView(icon: icon, iconColor: iconColor)
-        self.init(iconView: iconView, title: title, description: description, style: style, width: width, height: height)
+        self.init(iconView: iconView, title: title, description: description, style: style)
     }
 
     /// Construct a new DynamicNotchInfoWindow with an SF Symbol as the icon.
@@ -38,10 +41,8 @@ public class DynamicNotchInfo: DynamicNotch {
     ///   - title: A title for your content
     ///   - description:  An optional description for your content
     ///   - style: The popover's style. If unspecified, the style will be automatically set according to the screen.
-    ///   - width: Optional width of the notch. Default is 300.
-    ///   - height: Optional height of the notch. Default is 24.
-    public convenience init(systemImage: String, iconColor: Color = .white, title: String, description: String? = nil, style: DynamicNotch.Style! = nil, width: CGFloat = 300, height: CGFloat = 24) {
-        self.init(icon: Image(systemName: systemImage), iconColor: iconColor, title: title, description: description, style: style, width: width, height: height)
+    public convenience init(systemImage: String, iconColor: Color = .white, title: String, description: String? = nil, style: DynamicNotch.Style! = nil) {
+        self.init(icon: Image(systemName: systemImage), iconColor: iconColor, title: title, description: description, style: style)
     }
 
     // MARK: Set content
