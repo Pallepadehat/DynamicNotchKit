@@ -10,46 +10,38 @@ import SwiftUI
 struct NotchlessView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
     @State var windowHeight: CGFloat = 0
-
+    
+    private let notchWidth: CGFloat = 200
+    private let notchHeight: CGFloat = 32
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
                 Spacer()
-
-                dynamicNotch.content()
-                    .id(dynamicNotch.contentID)
-                    .safeAreaInset(edge: .top, spacing: 0) { Color.clear.frame(height: 15) }
-                    .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 15) }
-                    .safeAreaInset(edge: .leading, spacing: 0) { Color.clear.frame(width: 15) }
-                    .safeAreaInset(edge: .trailing, spacing: 0) { Color.clear.frame(width: 15) }
-                    .fixedSize()
-
-                    .onHover { hovering in
-                        dynamicNotch.isMouseInside = hovering
-                    }
-                    .background {
-                        VisualEffectView(material: .popover, blendingMode: .behindWindow)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                    .strokeBorder(.quaternary, lineWidth: 1)
-                            }
-                    }
-                    .clipShape(.rect(cornerRadius: 20))
-                    .shadow(color: .black.opacity(0.5), radius: dynamicNotch.isVisible ? 10 : 0)
-                    .padding(20)
-                    .background {
-                        GeometryReader { geo in
-                            Color.clear
-                                .onAppear {
-                                    windowHeight = geo.size.height // This makes sure that the floating window FULLY slides off before disappearing
-                                }
+                
+                // Permanent notch background
+                ZStack {
+                    // Notch background
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(.windowBackgroundColor))
+                        .frame(width: notchWidth, height: notchHeight)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(.quaternary, lineWidth: 0.5)
                         }
-                    }
-                    .offset(y: dynamicNotch.isVisible ? dynamicNotch.notchHeight : -windowHeight)
-                    .transition(.blur.animation(.smooth))
-
+                    
+                    // Content
+                    dynamicNotch.content()
+                        .id(dynamicNotch.contentID)
+                        .frame(maxWidth: notchWidth - 20) // Leave some padding
+                        .fixedSize()
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                
                 Spacer()
             }
+            .frame(height: notchHeight)
+            
             Spacer()
         }
     }
