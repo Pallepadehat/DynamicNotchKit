@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NotchlessView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
-    @State var windowHeight: CGFloat = 0
     @State private var contentOffset: CGFloat = -50 // For drop animation
     
     var body: some View {
@@ -32,7 +31,6 @@ struct NotchlessView<Content>: View where Content: View {
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
                         .frame(width: dynamicNotch.contentFrame.width, height: dynamicNotch.contentFrame.height)
-                        .fixedSize()
                         .offset(y: contentOffset)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
                         .onChange(of: dynamicNotch.isVisible) { isVisible in

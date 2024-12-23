@@ -40,10 +40,10 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
 
     private var maxAnimationDuration: Double = 0.8 // This is a timer to de-init the window after closing
     var animation: Animation {
-        boringAnimations.animation
+                dynamicAnimations.animation
     }
 
-    private var boringAnimations: BoringAnimations
+    private var dynamicAnimations: DynamicAnimations
 
     /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
@@ -53,7 +53,7 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
         self.contentID = contentID
         self.content = content
         self.notchStyle = style
-        self.boringAnimations = BoringAnimations()
+        self.dynamicAnimations = DynamicAnimations()
         
         // Get initial content frame size
         let hostingController = NSHostingController(rootView: content())

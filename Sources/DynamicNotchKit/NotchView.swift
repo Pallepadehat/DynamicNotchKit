@@ -19,8 +19,6 @@ struct NotchView<Content>: View where Content: View {
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(width: dynamicNotch.notchWidth + 20, height: dynamicNotch.notchHeight)
-                    // We add an extra 20 here because the corner radius of the top increases when shown.
-                    // (the remaining 10 has already been accounted for in refreshNotchSize)
 
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
@@ -28,9 +26,6 @@ struct NotchView<Content>: View where Content: View {
                         .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 15) }
                         .safeAreaInset(edge: .leading, spacing: 0) { Color.clear.frame(width: 15) }
                         .safeAreaInset(edge: .trailing, spacing: 0) { Color.clear.frame(width: 15) }
-
-                        .blur(radius: dynamicNotch.isVisible ? 0 : 10)
-                        .scaleEffect(dynamicNotch.isVisible ? 1 : 0.8)
                         .offset(y: contentOffset)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
                         .onChange(of: dynamicNotch.isVisible) { isVisible in
@@ -38,8 +33,7 @@ struct NotchView<Content>: View where Content: View {
                                 contentOffset = isVisible ? 0 : -50
                             }
                         }
-                        .padding(.horizontal, 15) // Small corner radius of the TOP of the notch
-                        .transition(.blur.animation(.smooth))
+                        .padding(.horizontal, 15)
                 }
                 .fixedSize()
                 .frame(minWidth: max(dynamicNotch.notchWidth, dynamicNotch.contentFrame.width))

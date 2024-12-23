@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public class BoringAnimations {
+public class DynamicAnimations {
     @Published var notchStyle: DynamicNotch<AnyView>.Style = .notch
     
     init() {
@@ -16,11 +16,7 @@ public class BoringAnimations {
     }
     
     var animation: Animation {
-        if #available(macOS 14.0, *), notchStyle == .notch {
-            Animation.spring(response: 0.4, dampingFraction: 0.6, blendDuration: 0.2)
-        } else {
-            Animation.spring(response: 0.4, dampingFraction: 0.6)
-        }
+        Animation.easeOut(duration: 0.2)
     }
     
     // TODO: Move all animations to this file
