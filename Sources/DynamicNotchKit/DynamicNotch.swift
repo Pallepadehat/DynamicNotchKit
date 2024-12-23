@@ -39,12 +39,10 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
 
     private var maxAnimationDuration: Double = 0.8 // This is a timer to de-init the window after closing
     var animation: Animation {
-        if #available(macOS 14.0, *), notchStyle == .notch {
-            Animation.spring(.bouncy(duration: 0.4))
-        } else {
-            Animation.timingCurve(0.16, 1, 0.3, 1, duration: 0.7)
-        }
+        boringAnimations.animation
     }
+
+    private var boringAnimations: BoringAnimations
 
     /// Makes a new DynamicNotch with custom content and style.
     /// - Parameters:
@@ -54,6 +52,7 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
         self.contentID = contentID
         self.content = content
         self.notchStyle = style
+        self.boringAnimations = BoringAnimations()
         self.subscription = NotificationCenter.default
             .publisher(for: NSApplication.didChangeScreenParametersNotification)
             .sink { [weak self] _ in

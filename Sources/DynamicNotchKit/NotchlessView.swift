@@ -10,6 +10,7 @@ import SwiftUI
 struct NotchlessView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
     @State var windowHeight: CGFloat = 0
+    @State private var contentOffset: CGFloat = -50 // For drop animation
     
     private let notchWidth: CGFloat = 200
     private let notchHeight: CGFloat = 32
@@ -30,11 +31,18 @@ struct NotchlessView<Content>: View where Content: View {
                                 .strokeBorder(.quaternary, lineWidth: 0.5)
                         }
                     
-                    // Content
+                    // Content with drop animation
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
-                        .frame(maxWidth: notchWidth - 20) // Leave some padding
+                        .frame(maxWidth: notchWidth - 20)
                         .fixedSize()
+                        .offset(y: contentOffset)
+                        .opacity(dynamicNotch.isVisible ? 1 : 0)
+                        .onChange(of: dynamicNotch.isVisible) { isVisible in
+                            withAnimation(dynamicNotch.animation) {
+                                contentOffset = isVisible ? 0 : -50
+                            }
+                        }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 
