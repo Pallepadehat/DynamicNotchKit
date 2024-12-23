@@ -9,16 +9,14 @@ import SwiftUI
 
 struct NotchlessView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
-    @State private var contentOffset: CGFloat = 0 // Start at normal position
+    @State private var contentOffset: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
                 Spacer()
                 
-                // Permanent notch background
                 ZStack {
-                    // Notch background
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(.windowBackgroundColor))
                         .frame(width: max(dynamicNotch.contentFrame.width + 20, 200), height: max(dynamicNotch.contentFrame.height + 20, 32))
@@ -27,7 +25,6 @@ struct NotchlessView<Content>: View where Content: View {
                                 .strokeBorder(.quaternary, lineWidth: 0.5)
                         }
                     
-                    // Content with drop animation
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
                         .frame(width: dynamicNotch.contentFrame.width, height: dynamicNotch.contentFrame.height)
@@ -45,5 +42,6 @@ struct NotchlessView<Content>: View where Content: View {
             
             Spacer()
         }
+        .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
     }
 }

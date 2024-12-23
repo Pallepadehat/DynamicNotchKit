@@ -38,10 +38,10 @@ struct NotchView<Content>: View where Content: View {
                 .background {
                     Rectangle()
                         .foregroundStyle(.black)
-                        .padding(-50) // The opening/closing animation can overshoot, so this makes sure that it's still black
+                        .padding(-50)
                 }
                 .mask {
-                    GeometryReader { _ in // This helps with positioning everything
+                    GeometryReader { _ in
                         HStack {
                             Spacer(minLength: 0)
                             NotchShape(cornerRadius: dynamicNotch.isVisible ? 20 : nil)
@@ -54,11 +54,11 @@ struct NotchView<Content>: View where Content: View {
                     }
                 }
                 .shadow(color: .black.opacity(0.5), radius: dynamicNotch.isVisible ? 10 : 0)
-                .animation(dynamicNotch.animation, value: dynamicNotch.contentID)
 
                 Spacer()
             }
             Spacer()
         }
+        .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
     }
 }
