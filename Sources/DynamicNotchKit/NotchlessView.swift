@@ -12,9 +12,6 @@ struct NotchlessView<Content>: View where Content: View {
     @State var windowHeight: CGFloat = 0
     @State private var contentOffset: CGFloat = -50 // For drop animation
     
-    private let notchWidth: CGFloat = 200
-    private let notchHeight: CGFloat = 32
-    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -25,7 +22,7 @@ struct NotchlessView<Content>: View where Content: View {
                     // Notch background
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(.windowBackgroundColor))
-                        .frame(width: notchWidth, height: notchHeight)
+                        .frame(width: max(dynamicNotch.contentFrame.width + 20, 200), height: max(dynamicNotch.contentFrame.height + 20, 32))
                         .overlay {
                             RoundedRectangle(cornerRadius: 12)
                                 .strokeBorder(.quaternary, lineWidth: 0.5)
@@ -34,7 +31,7 @@ struct NotchlessView<Content>: View where Content: View {
                     // Content with drop animation
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
-                        .frame(maxWidth: notchWidth - 20)
+                        .frame(width: dynamicNotch.contentFrame.width, height: dynamicNotch.contentFrame.height)
                         .fixedSize()
                         .offset(y: contentOffset)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
@@ -45,10 +42,13 @@ struct NotchlessView<Content>: View where Content: View {
                         }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .onHover { hovering in
+                    dynamicNotch.isMouseInside = hovering
+                }
                 
                 Spacer()
             }
-            .frame(height: notchHeight)
+            .frame(height: max(dynamicNotch.contentFrame.height + 20, 32))
             
             Spacer()
         }

@@ -22,6 +22,7 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
     // Notch Size
     @Published var notchWidth: CGFloat = 0
     @Published var notchHeight: CGFloat = 0
+    @Published var contentFrame: CGSize = .init(width: 300, height: 32)
 
     // Notch Closing Properties
     @Published var isMouseInside: Bool = false // If the mouse is inside, the notch will not auto-hide
@@ -53,6 +54,14 @@ public class DynamicNotch<Content>: ObservableObject where Content: View {
         self.content = content
         self.notchStyle = style
         self.boringAnimations = BoringAnimations()
+        
+        // Get initial content frame size
+        let hostingController = NSHostingController(rootView: content())
+        hostingController.view.frame = NSRect(x: 0, y: 0, width: 0, height: 0)
+        hostingController.view.layoutSubtreeIfNeeded()
+        let size = hostingController.view.fittingSize
+        self.contentFrame = CGSize(width: size.width + 30, height: size.height + 30) // Add padding
+        
         self.subscription = NotificationCenter.default
             .publisher(for: NSApplication.didChangeScreenParametersNotification)
             .sink { [weak self] _ in

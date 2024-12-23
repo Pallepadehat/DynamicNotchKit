@@ -23,6 +23,7 @@ struct NotchView<Content>: View where Content: View {
 
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
+                        .frame(width: dynamicNotch.contentFrame.width, height: dynamicNotch.contentFrame.height)
                         .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 15) }
                         .safeAreaInset(edge: .leading, spacing: 0) { Color.clear.frame(width: 15) }
                         .safeAreaInset(edge: .trailing, spacing: 0) { Color.clear.frame(width: 15) }
@@ -34,7 +35,7 @@ struct NotchView<Content>: View where Content: View {
                         .transition(.blur.animation(.smooth))
                 }
                 .fixedSize()
-                .frame(minWidth: dynamicNotch.notchWidth)
+                .frame(minWidth: max(dynamicNotch.notchWidth, dynamicNotch.contentFrame.width))
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
