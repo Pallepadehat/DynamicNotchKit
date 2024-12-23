@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NotchlessView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
-    @State private var contentOffset: CGFloat = -50 // For drop animation
+    @State private var contentOffset: CGFloat = 0 // Start at normal position
     
     var body: some View {
         VStack(spacing: 0) {
@@ -31,13 +31,8 @@ struct NotchlessView<Content>: View where Content: View {
                     dynamicNotch.content()
                         .id(dynamicNotch.contentID)
                         .frame(width: dynamicNotch.contentFrame.width, height: dynamicNotch.contentFrame.height)
-                        .offset(y: contentOffset)
+                        .offset(y: dynamicNotch.isVisible ? contentOffset : -dynamicNotch.contentFrame.height)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
-                        .onChange(of: dynamicNotch.isVisible) { isVisible in
-                            withAnimation(dynamicNotch.animation) {
-                                contentOffset = isVisible ? 0 : -50
-                            }
-                        }
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .onHover { hovering in

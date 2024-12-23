@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NotchView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
-    @State private var contentOffset: CGFloat = -50 // For drop animation
+    @State private var contentOffset: CGFloat = 0 // Start at normal position
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,13 +26,8 @@ struct NotchView<Content>: View where Content: View {
                         .safeAreaInset(edge: .bottom, spacing: 0) { Color.clear.frame(height: 15) }
                         .safeAreaInset(edge: .leading, spacing: 0) { Color.clear.frame(width: 15) }
                         .safeAreaInset(edge: .trailing, spacing: 0) { Color.clear.frame(width: 15) }
-                        .offset(y: contentOffset)
+                        .offset(y: dynamicNotch.isVisible ? contentOffset : -dynamicNotch.contentFrame.height)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
-                        .onChange(of: dynamicNotch.isVisible) { isVisible in
-                            withAnimation(dynamicNotch.animation) {
-                                contentOffset = isVisible ? 0 : -50
-                            }
-                        }
                         .padding(.horizontal, 15)
                 }
                 .fixedSize()
