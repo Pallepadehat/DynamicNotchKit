@@ -35,6 +35,7 @@ struct NotchlessView<Content>: View where Content: View {
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
+                .hapticFeedback(.alignment)
                 
                 Spacer()
             }

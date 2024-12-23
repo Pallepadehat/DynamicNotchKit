@@ -35,6 +35,7 @@ struct NotchView<Content>: View where Content: View {
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
+                .hapticFeedback(.alignment)
                 .background {
                     Rectangle()
                         .foregroundStyle(.black)
