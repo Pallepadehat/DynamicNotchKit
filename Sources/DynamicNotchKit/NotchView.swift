@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NotchView<Content>: View where Content: View {
     @ObservedObject var dynamicNotch: DynamicNotch<Content>
+    @State private var contentOffset: CGFloat = -50 // For drop animation
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,7 +31,13 @@ struct NotchView<Content>: View where Content: View {
 
                         .blur(radius: dynamicNotch.isVisible ? 0 : 10)
                         .scaleEffect(dynamicNotch.isVisible ? 1 : 0.8)
-                        .offset(y: dynamicNotch.isVisible ? 0 : 5)
+                        .offset(y: contentOffset)
+                        .opacity(dynamicNotch.isVisible ? 1 : 0)
+                        .onChange(of: dynamicNotch.isVisible) { isVisible in
+                            withAnimation(dynamicNotch.animation) {
+                                contentOffset = isVisible ? 0 : -50
+                            }
+                        }
                         .padding(.horizontal, 15) // Small corner radius of the TOP of the notch
                         .transition(.blur.animation(.smooth))
                 }
