@@ -19,7 +19,7 @@ struct NotchlessView<Content>: View where Content: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color(.windowBackgroundColor))
-                        .frame(width: max(dynamicNotch.contentFrame.width + 20, 200), height: max(dynamicNotch.contentFrame.height + 20, 32))
+                        .frame(width: dynamicNotch.contentFrame.width + 20, height: dynamicNotch.contentFrame.height + 20)
                         .overlay {
                             RoundedRectangle(cornerRadius: 12)
                                 .strokeBorder(.quaternary, lineWidth: 0.5)
@@ -39,7 +39,7 @@ struct NotchlessView<Content>: View where Content: View {
                 
                 Spacer()
             }
-            .frame(height: max(dynamicNotch.contentFrame.height + 20, 32))
+            .frame(height: dynamicNotch.contentFrame.height + 20)
             
             Spacer()
         }

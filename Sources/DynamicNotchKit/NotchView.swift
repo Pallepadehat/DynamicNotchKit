@@ -31,7 +31,7 @@ struct NotchView<Content>: View where Content: View {
                         .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
                 }
                 .fixedSize()
-                .frame(minWidth: max(dynamicNotch.notchWidth, dynamicNotch.contentFrame.width))
+                .frame(width: dynamicNotch.notchWidth)
                 .onHover { hovering in
                     dynamicNotch.isMouseInside = hovering
                 }
