@@ -28,7 +28,6 @@ struct NotchView<Content>: View where Content: View {
                         .safeAreaInset(edge: .trailing, spacing: 0) { Color.clear.frame(width: 15) }
                         .offset(y: dynamicNotch.isVisible ? contentOffset : -dynamicNotch.contentFrame.height)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
-                        .padding(.horizontal, 15)
                         .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
                 }
                 .fixedSize()
