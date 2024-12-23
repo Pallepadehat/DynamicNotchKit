@@ -16,7 +16,7 @@ public class DynamicAnimations {
     }
     
     var animation: Animation {
-        Animation.easeOut(duration: 0.2)
+        Animation.spring(response: 0.3, dampingFraction: 0.8)
     }
     
     // TODO: Move all animations to this file

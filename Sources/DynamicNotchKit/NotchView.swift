@@ -29,6 +29,7 @@ struct NotchView<Content>: View where Content: View {
                         .offset(y: dynamicNotch.isVisible ? contentOffset : -dynamicNotch.contentFrame.height)
                         .opacity(dynamicNotch.isVisible ? 1 : 0)
                         .padding(.horizontal, 15)
+                        .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
                 }
                 .fixedSize()
                 .frame(minWidth: max(dynamicNotch.notchWidth, dynamicNotch.contentFrame.width))
@@ -49,11 +50,13 @@ struct NotchView<Content>: View where Content: View {
                                     width: dynamicNotch.isVisible ? nil : dynamicNotch.notchWidth,
                                     height: dynamicNotch.isVisible ? nil : dynamicNotch.notchHeight
                                 )
+                                .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
                             Spacer(minLength: 0)
                         }
                     }
                 }
                 .shadow(color: .black.opacity(0.5), radius: dynamicNotch.isVisible ? 10 : 0)
+                .animation(dynamicNotch.animation, value: dynamicNotch.isVisible)
 
                 Spacer()
             }
