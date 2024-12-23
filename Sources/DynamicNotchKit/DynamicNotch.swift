@@ -116,6 +116,22 @@ public extension DynamicNotch {
         }
     }
 
+    /// Show the DynamicNotch with a specific size.
+    /// - Parameters:
+    ///   - screen: Screen to show on. Default is the primary screen.
+    ///   - time: Time to show in seconds. If 0, the DynamicNotch will stay visible until `hide()` is called.
+    ///   - width: The width of the content. If nil, uses the default or current width.
+    ///   - height: The height of the content. If nil, uses the default or current height.
+    func show(on screen: NSScreen = NSScreen.screens[0], for time: Double = 0, width: CGFloat? = nil, height: CGFloat? = nil) {
+        if let width = width {
+            contentFrame.width = width
+        }
+        if let height = height {
+            contentFrame.height = height
+        }
+        show(on: screen, for: time)
+    }
+
     /// Hide the DynamicNotch.
     func hide(ignoreMouse: Bool = false) {
         guard isVisible else { return }
