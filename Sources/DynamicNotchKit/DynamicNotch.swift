@@ -188,10 +188,10 @@ extension DynamicNotch {
 
     func refreshNotchSize(_ screen: NSScreen) {
         if let notchSize = screen.notchSize {
-            notchWidth = notchSize.width
+            notchWidth = contentFrame.width > 0 ? contentFrame.width : notchSize.width
             notchHeight = notchSize.height
         } else {
-            notchWidth = 300
+            notchWidth = contentFrame.width > 0 ? contentFrame.width : 300
             notchHeight = screen.frame.maxY - screen.visibleFrame.maxY // menubar height
         }
     }
